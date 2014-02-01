@@ -36,7 +36,7 @@ module.exports = function(grunt) {
                 tasks: ['default']
             },
             livereload: {
-                files: ['./index.html']
+                files: ['index.html']
             },
             options: {
                 livereload: {
@@ -50,7 +50,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    // Default task(s).
     grunt.registerTask('default', ['browserify']);
     grunt.registerTask('production', ['browserify', 'uglify']);
 };
