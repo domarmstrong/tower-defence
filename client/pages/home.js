@@ -5,8 +5,15 @@ return new Screen([
     new ui.Button({
         x: 20, y: 20, w: 100, h: 50,
         text: 'A button',
+        n: 0,
         click: function () {
-            game.go('other');
+            if (this.state.n == 0) {
+                this.set({'color': 'red'});
+                this.state.n = 1;
+            } else if (this.state.n == 1) {
+                this.set({'color': 'green'});
+                this.state.n = 0;
+            }
         }
     })
 ])
