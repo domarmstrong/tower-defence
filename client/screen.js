@@ -2,12 +2,18 @@ function Screen(controls) {
     this.controls = controls;
 }
 Screen.prototype = {
-    draw: function draw(canvas) {
-        canvas.clear();
+    start: function (canvas) {
+        this.canvas = canvas;
+        this.draw();
+    },
+    draw: function draw() {
+        this.canvas.clear();
         for (var i = 0; i < this.controls.length; i++) {
-            this.controls[i].draw(canvas.context);
+            widget = this.controls[i];
+            widget.screen = this;
+            widget.draw(this.canvas.cx);
         }
-    }
+    },
 };
 
 module.exports = Screen;
