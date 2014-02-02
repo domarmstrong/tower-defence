@@ -5,4 +5,4 @@ function reexport(mod) {
     });
 }
 
-reexport(require('./canvasWidgets/controls'));
+reexport(require('./canvas/controls'));
