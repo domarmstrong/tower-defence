@@ -18,7 +18,7 @@ Game.prototype = {
         this.routes = routes;
     },
     go: function go(page) {
-        this.screen = this.routes[page](this);
+        this.screen = this.routes[page]();
         this.mouse.registerScreen(this.screen);
         this.screen.start(this.canvas);
     }

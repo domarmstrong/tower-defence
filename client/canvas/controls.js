@@ -12,9 +12,9 @@ util.inherit(shape.Rect, Bound, {
         this.super(shape.Rect, 'init', props);
         this.children = children || [];
     },
-    draw: function (cx) {
-        this.super(shape.Rect, 'draw', cx);
-        this.drawChildren(cx);
+    draw: function (page, cx) {
+        this.super(shape.Rect, 'draw', page, cx);
+        this.drawChildren(page, cx);
     },
 });
 mixins.children(Bound);
@@ -32,14 +32,18 @@ util.inherit(Bound, Button, {
         background: '#222555',
         color: '#FFFFFF',
     },
-    draw: function draw(cx) {
+    draw: function draw(page, cx) {
+        var s = this.state;
         this.children = [
             new shape.Text({
-                'text': this.state.text,
-                'color': this.state.color
+                'text': s.text,
+                'fontSize': s.fontSize,
+                'fontWeight': s.fontWeight,
+                'fontFamily': s.fontFamily,
+                'color': s.color
             }).setBound(this)
         ];
-        this.super(Bound, 'draw', cx);
+        this.super(Bound, 'draw', page, cx);
     },
     click: function click(event) {
         if (this.props.click) {

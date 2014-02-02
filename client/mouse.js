@@ -16,7 +16,7 @@ Mouse.prototype = {
         }
     },
     move: function move(event) {
-        this.action(event, 'move');
+        //this.action(event, 'move');
     },
     click: function click(event) {
         this.action(event, 'click');
@@ -24,12 +24,20 @@ Mouse.prototype = {
     action: function action(event, action) {
         this.setEvent(event);
         if (!this.screen) return;
-        var i = this.screen.controls.length - 1;
+        var widget = this.search(action, this.screen.controls);
+        if (widget) widget[action](this.event);
+    },
+    search: function search(action, children) {
+        var i = children.length - 1;
         // Loop backwards because last drawn object will always be ontop
         while (i + 1) {
-            var widget = this.screen.controls[i];
+            var widget = children[i];
+            if (widget.children) {
+                var found = this.search(action, widget.children);
+                if (found) return found;
+            }
             if (widget.props[action] && this.collision(widget)) {
-                return widget[action](this.event);
+                return widget
             }
             i--;
         }
@@ -41,11 +49,12 @@ Mouse.prototype = {
     },
     _collision: {
         'rect': function (widget) {
-            var _ = widget.state.shape,
+            var w = widget;
+            var _ = w.state.shape,
                 o = this.getOffset();
             if (
-                (o.x > _.x && o.x < _.x + _.w) &&
-                (o.y > _.y && o.y < _.y + _.h)
+                (o.x > w.x(_.x) && o.x < w.x(_.x) + w.w()) &&
+                (o.y > w.y(_.y) && o.y < w.y(_.y) + w.h())
             ) {
                 return true;
             }

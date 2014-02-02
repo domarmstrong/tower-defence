@@ -6,6 +6,7 @@ function Screen(controls) {
 Screen.prototype = {
     init: function (controls) {
         this.controls = controls;
+        this._widgets = {};
     },
     start: function (canvas) {
         this.canvas = canvas;
@@ -14,9 +15,19 @@ Screen.prototype = {
         }, this.controls);
         this.draw();
     },
-    draw: function draw() {
-        this.root.draw(this.canvas.cx);
+    draw: function () {
+        var self = this;
+        if (! self._suppress) {
+            // Limit to 80 fps (seems to work best)
+            self._suppress = setTimeout(function () {
+                self._suppress = null;
+            }, Math.floor(1000 / 80));
+            self.root.draw(self, self.canvas.cx);
+        }
     },
+    getWidget: function (id) {
+        return this._widgets[id];
+    }
 };
 
 module.exports = Screen;

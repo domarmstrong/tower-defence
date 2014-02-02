@@ -23,9 +23,18 @@ Base.prototype = {
         this.screen.draw();
         return this;
     },
+    get: function get(prop) {
+        return this.state[prop];
+    },
     setBound: function setBound(widget) {
         this.bound = widget;
         return this;
+    },
+    draw: function (page, cx) {
+        this.screen = page;
+        if (this.props.id) {
+            this.screen._widgets[this.props.id] = this;
+        }
     },
     x: function (x) {
         return this.getCoordinate('x', x);

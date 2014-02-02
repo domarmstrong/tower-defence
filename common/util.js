@@ -15,6 +15,8 @@ module.exports.inherit = function (parent, constructor, properties) {
  */
 module.exports.extend = function (a, b) {
     Object.keys(b).forEach(function (key) {
-        a[key] = b[key];
+        if (b[key] !== undefined) {
+            a[key] = b[key];
+        }
     });
 };

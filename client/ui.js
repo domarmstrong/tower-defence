@@ -6,3 +6,4 @@ function reexport(mod) {
 }
 
 reexport(require('./canvas/controls'));
+reexport(require('./canvas/shape'));
