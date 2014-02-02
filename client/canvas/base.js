@@ -13,9 +13,9 @@ Base.prototype = {
         }
         this.state = util.extend(this.state, this.props);
     },
-    super: function(method) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        this.parentClass.prototype[method].apply(this, args);
+    super: function(superClass, method) {
+        var args = Array.prototype.slice.call(arguments, 2);
+        superClass.prototype[method].apply(this, args);
     },
     set: function set(obj) {
         this.state = util.extend(this.state, obj);

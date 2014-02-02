@@ -7,7 +7,6 @@ module.exports.inherit = function (parent, constructor, properties) {
         proto[key] = properties[key]; 
     });
     proto.constructor = constructor;
-    proto.parentClass = parent;
     constructor.prototype = proto;
 };
 

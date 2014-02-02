@@ -6,8 +6,8 @@ function Button(props) {
 }
 util.inherit(base.Base, Button, {
     init: function init(props) {
-        this.super('init', props);
         this.state.shape = {
+        this.super(Bound, 'init', props);
             x: props.x, 
             y: props.y, 
             w: props.w, 
