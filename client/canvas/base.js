@@ -21,6 +21,9 @@ Base.prototype = {
     set: function set(obj) {
         this.state = util.extend(this.state, obj);
         this.screen.draw();
+    },
+    setBound: function setBound(widget) {
+        this.bound = widget;
     }
 };
 module.exports.Base = Base;
