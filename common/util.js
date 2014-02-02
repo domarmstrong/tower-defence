@@ -11,16 +11,10 @@ module.exports.inherit = function (parent, constructor, properties) {
 };
 
 /**
- * Creates a copy of a and then extend overwiting with properties from b
- * Return a new object
+ * Extend a with b overwiting properties
  */
 module.exports.extend = function (a, b) {
-    var obj = {};
-    Object.keys(a).forEach(function (key) {
-        obj[key] = a[key];
-    });
     Object.keys(b).forEach(function (key) {
-        obj[key] = b[key];
+        a[key] = b[key];
     });
-    return obj;
 };

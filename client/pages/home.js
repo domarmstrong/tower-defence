@@ -2,19 +2,24 @@ var Screen = require('../screen');
 var ui = require('../ui');
 module.exports = function (game) {
 return new Screen([
-    new ui.Button({
-        x: 20, y: 20, w: 100, h: 50,
-        text: 'A button',
-        n: 0,
-        click: function () {
-            if (this.state.n == 0) {
-                this.set({'color': 'red'});
-                this.state.n = 1;
-            } else if (this.state.n == 1) {
-                this.set({'color': 'green'});
-                this.state.n = 0;
+    new ui.Bound({
+        x: 0, y: 0, h: '100%', w: 50,
+        'background': '#222'
+    }, [
+        new ui.Button({
+            x: 0, y: 0, w: '100%', h: 40,
+            text: 'A',
+            click: function () {
+                console.log(this);
             }
-        }
-    })
+        }),
+        new ui.Button({
+            x: 0, y: 50, w: '100%', h: 40,
+            text: 'B',
+            click: function () {
+                console.log(this);
+            }
+        })
+    ])
 ])
 };
