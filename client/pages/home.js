@@ -3,6 +3,10 @@ var ui = require('../ui');
 module.exports = function (game) {
 return new Screen([
     new ui.Bound({
+        x: 50, y: 0, h: '100%', w: '100%',
+        'background': '#555'
+    }),
+    new ui.Bound({
         x: 0, y: 0, h: '100%', w: 50,
         'background': '#222'
     }, [

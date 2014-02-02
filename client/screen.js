@@ -10,8 +10,7 @@ Screen.prototype = {
     start: function (canvas) {
         this.canvas = canvas;
         this.root = new ui.Bound({
-            x: 0, y: 0, h: canvas.c.height, w: canvas.c.width,
-            background: 'green' 
+            x: 0, y: 0, h: canvas.c.height, w: canvas.c.width
         }, this.controls);
         this.draw();
     },
