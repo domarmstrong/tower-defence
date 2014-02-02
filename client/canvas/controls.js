@@ -1,5 +1,6 @@
 var util = require('../../common/util');
 var base = require('./base');
+var shape = require('./shape');
 module.exports = {};
 
 function Button(props) {
@@ -21,20 +22,15 @@ util.inherit(base.Base, Button, {
         color: '#FFFFFF',
     },
     draw: function draw(c) {
-        var _ = this.state.shape;
-        c.fillStyle = this.state.background;
-        c.fillRect(_.x, _.y, _.w, _.h);
-        this.text(c);
-    },
-    text: function text(c) {
-        var p = this.props;
-        var _ = this.state.shape;
-        if (! p.text) return;
-        c.font = 'bold 18px sans-serif';
-        c.textAlign = 'center';
-        c.textBaseline = 'middle';
-        c.fillStyle = this.state.color;
-        c.fillText(p.text, _.x + _.w / 2, _.y + _.h / 2)
+        this.super(Bound, 'draw', c);
+        if (this.state.text) {
+            var text = new shape.Text({
+                'text': this.state.text,
+                'color': this.state.color
+            })
+            text.setBound(this);
+            text.draw(c);
+        }
     },
     click: function click(event) {
         if (this.props.click) {
