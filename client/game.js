@@ -1,16 +1,10 @@
 var Mouse = require('./mouse');
 var Canvas = require('./canvas');
 
-var routes = {
-    'home': require('./pages/home'),
-    'other': require('./pages/other')
-};
-
 function Game() {
     this.canvas = new Canvas('canvas');
     this.mouse = new Mouse();
     this.setupMouse();
-    this.go('home');
 }
 Game.prototype = {
     newGame: function newGame() {
@@ -20,8 +14,11 @@ Game.prototype = {
         this.canvas.on('click', this.mouse.click.bind(this.mouse))
         this.canvas.on('mousemove', this.mouse.move.bind(this.mouse));
     },
+    setRoutes: function setRoutes(routes) {
+        this.routes = routes;
+    },
     go: function go(page) {
-        this.screen = routes[page](this);
+        this.screen = this.routes[page](this);
         this.mouse.registerScreen(this.screen);
         this.screen.start(this.canvas);
     }
