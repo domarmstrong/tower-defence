@@ -1,5 +1,6 @@
 var util = require('../../common/util');
 var base = require('./base');
+module.exports = {};
 
 function Button(props) {
     this.init(props);
@@ -41,6 +42,4 @@ util.inherit(base.Base, Button, {
         }
     }
 });
-module.exports = {
-    'Button': Button
-};
+module.exports.Button = Button;

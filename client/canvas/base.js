@@ -1,4 +1,5 @@
 var util = require('../../common/util');
+module.exports = {};
 
 function Base(props) {
     this.init(props);
@@ -22,6 +23,4 @@ Base.prototype = {
         this.screen.draw();
     }
 };
-module.exports = {
-    'Base': Base
-};
+module.exports.Base = Base;
