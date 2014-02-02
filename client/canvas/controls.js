@@ -3,20 +3,24 @@ var base = require('./base');
 var shape = require('./shape');
 module.exports = {};
 
+function Bound(props) {
+    this.init(props);
+}
+util.inherit(shape.Rect, Bound, {
+    init: function init(props) {
+        this.super(shape.Rect, 'init', props);
+    }
+});
+module.exports.Bound = Bound;
+
+
 function Button(props) {
     this.init(props);
 }
-util.inherit(base.Base, Button, {
+util.inherit(Bound, Button, {
     init: function init(props) {
-        this.state.shape = {
         this.super(Bound, 'init', props);
-            x: props.x, 
-            y: props.y, 
-            w: props.w, 
-            h: props.h 
-        };
     },
-    shape: 'rect',
     defaults: {
         background: '#222555',
         color: '#FFFFFF',
