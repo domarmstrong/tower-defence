@@ -1,12 +1,14 @@
 /**
- * Inherit from a constuctor and extend with properties from obj
+ * Inherit from a constructor and extend with properties from properties
  */
-module.exports.inherit = function (parent, obj) {
+module.exports.inherit = function (parent, constructor, properties) {
     var proto = Object.create(parent.prototype); 
-    Object.keys(obj).forEach(function (key) {
-        proto[key] = obj[key]; 
+    Object.keys(properties).forEach(function (key) {
+        proto[key] = properties[key]; 
     });
-    return proto;
+    proto.constructor = constructor;
+    proto.parentClass = parent;
+    constructor.prototype = proto;
 };
 
 /**

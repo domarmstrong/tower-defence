@@ -1,14 +1,5 @@
 var util = require('../../common/util');
-
-function Control() {
-}
-Control.prototype = {
-    set: function set(obj) {
-        this.state = util.extend(this.state, obj);
-        this.screen.draw();
-    }
-};
-
+var base = require('./base');
 
 function Button(props) {
     this.props = props;
@@ -21,7 +12,7 @@ function Button(props) {
         h: props.h 
     };
 }
-Button.prototype = util.inherit(Control, {
+util.inherit(base.Base, Button, {
     shape: 'rect',
     defaults: {
         background: '#222555',
