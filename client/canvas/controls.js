@@ -1,6 +1,4 @@
 var util = require('../../common/util');
-var Mouse = require('../mouse');
-var mouse = new Mouse();
 
 function Control() {
 }
