@@ -2,17 +2,18 @@ var util = require('../../common/util');
 var base = require('./base');
 
 function Button(props) {
-    this.props = props;
-    this.state = util.extend({}, this.defaults);
-    this.state = util.extend(this.state, this.props);
-    this.state.shape = {
-        x: props.x, 
-        y: props.y, 
-        w: props.w, 
-        h: props.h 
-    };
+    this.init(props);
 }
 util.inherit(base.Base, Button, {
+    init: function init(props) {
+        this.super('init', props);
+        this.state.shape = {
+            x: props.x, 
+            y: props.y, 
+            w: props.w, 
+            h: props.h 
+        };
+    },
     shape: 'rect',
     defaults: {
         background: '#222555',
