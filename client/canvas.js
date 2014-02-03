@@ -11,30 +11,42 @@ Canvas.prototype = {
         this.cx.clearRect(0, 0, this.c.width, this.c.height);
     },
     on: function (name, fn) {
-        // TODO: make this work for namespaces and multiple fns array
+        /*
+         * Add an event listener
+         */
         this.off(name, fn);
         this.c.addEventListener(name, fn);
-        this.events[name] = fn;
+        if (! this.events[name]) this.events[name] = [];
+        this.events[name].push(fn);
     },
     off: function (name, fn) {
-        // TODO: make this work for namespaces and multiple fns array
+        /*
+         * Remove an event listener
+         * If just name given removes all event listeners for name
+         * If name & fn pointer just remove that one
+         */
         if (typeof name == 'string' && !fn) {
-            fn = this.events.name; 
-        } else if (typeof name == 'function') {
-            fn = name;
-            name = null;
-            for (var n in this.events) {
-                if (this.events.hasOwnProperty(n)) {
-                    if (fn == this.events[n]) {
-                        name = n;
-                    }
+            fns = this.events[name]; 
+            if (! Array.isArray(fns)) return;
+            while (fns.length) {
+                this.c.removeEventListener(name, fns.pop());
+            }
+        } else {
+            if (!name || !fn) {
+                throw new Error('.off requires an event name or event name & function pointer to the original function');
+            }
+            var fns = this.events[name];
+            if (! Array.isArray(fns)) return;
+            for (var i = 0; i < fns.length; i++) {
+                if (fns[i] == fn) {
+                    fns.splice(i, 1);
+                    break;
                 }
             }
-            if (!name) {
-                throw new Error('Cannot find event handler');
-            }
         }
-        this.c.removeEventListener(name, fn);
+        if (! this.events[name].length) {
+            delete this.events[name];
+        }
     }
 };
 module.exports = Canvas;
