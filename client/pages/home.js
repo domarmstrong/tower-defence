@@ -14,7 +14,7 @@ page.controls = [
             new ui.Grid({
                 id: 'grid',
                 strokeStyle: '#FFFFFF',
-                size: 10
+                size: 26
             })
         ]),
         new ui.Bound({
@@ -46,7 +46,7 @@ page.controls = [
                 fontSize: '11px',
                 click: function () {
                     var grid = page.getWidget('grid');
-                    grid.set({'size': 10});
+                    grid.set({'size': grid.props.size});
                 }
             })
         ])
