@@ -46,6 +46,7 @@ util.inherit(Bound, Button, {
         this.super(Bound, 'draw', page, cx);
     },
     click: function click(event) {
+        event.propagate = false;
         if (this.props.click) {
             this.props.click.call(this);
         }

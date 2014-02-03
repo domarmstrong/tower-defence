@@ -16,30 +16,28 @@ Mouse.prototype = {
         }
     },
     move: function move(event) {
-        //this.action(event, 'move');
+        this.handle(event, 'move');
     },
     click: function click(event) {
-        this.action(event, 'click');
+        this.handle(event, 'click');
     },
-    action: function action(event, action) {
+    handle: function handle(event, action) {
         this.setEvent(event);
-        if (!this.screen) return;
-        var widget = this.search(action, this.screen.controls);
-        if (widget) widget[action](this.event);
+        event.propagate = true;
+        if (this.screen) this.bubble(action, this.screen.root.children);
     },
-    search: function search(action, children) {
+    bubble: function bubble(action, children) {
         var i = children.length - 1;
         // Loop backwards because last drawn object will always be ontop
-        while (i + 1) {
+        for (; i >= 0; i--) {
             var widget = children[i];
             if (widget.children) {
-                var found = this.search(action, widget.children);
-                if (found) return found;
+                this.bubble(action, widget.children);
             }
-            if (widget.props[action] && this.collision(widget)) {
-                return widget
+            if (widget[action] && this.collision(widget)) {
+                if (! event.propagate) return;
+                widget[action](this.event);
             }
-            i--;
         }
     },
     collision: function collision(widget) {
