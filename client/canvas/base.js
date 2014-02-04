@@ -1,4 +1,4 @@
-var util = require('../../common/util');
+var util = require('../util');
 module.exports = {};
 
 function Base(props) {

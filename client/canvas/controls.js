@@ -1,4 +1,4 @@
-var util = require('../../common/util');
+var util = require('../util');
 var base = require('./base');
 var shape = require('./shape');
 var mixins = require('./mixins');

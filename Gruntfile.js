@@ -9,7 +9,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 files: {
-                    'build/<%= pkg.name %>.js': ['client/main.js']
+                    'build/<%= pkg.name %>.js': ['game/main.js']
                 }
             }
         },
@@ -32,7 +32,7 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: ['common/**/*.js', 'client/**/*.js'],
+                files: ['common/**/*.js', 'client/**/*.js', 'game/**/*.js'],
                 tasks: ['default']
             },
             livereload: {

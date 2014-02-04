@@ -1,9 +1,8 @@
+var util = require('./util');
 module.exports = {};
-function reexport(mod) {
-    Object.keys(mod).forEach(function (key) {
-        module.exports[key] = mod[key];
-    });
-}
 
+reexport = util.reexport(module);
+
+reexport(require('./canvas/base'));
 reexport(require('./canvas/controls'));
 reexport(require('./canvas/shape'));

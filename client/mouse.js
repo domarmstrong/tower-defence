@@ -15,12 +15,6 @@ Mouse.prototype = {
             y: this.event.offsetY
         }
     },
-    move: function move(event) {
-        this.handle(event, 'move');
-    },
-    click: function click(event) {
-        this.handle(event, 'click');
-    },
     handle: function handle(event, action) {
         this.setEvent(event);
         event.propagate = true;
@@ -48,7 +42,7 @@ Mouse.prototype = {
     _collision: {
         'rect': function (widget) {
             var w = widget;
-            var _ = w.state.shape,
+            var _ = w.state,
                 o = this.getOffset();
             if (
                 (o.x > w.x(_.x) && o.x < w.x(_.x) + w.w()) &&
@@ -56,6 +50,7 @@ Mouse.prototype = {
             ) {
                 return true;
             }
+            return false;
         }
     }
 };

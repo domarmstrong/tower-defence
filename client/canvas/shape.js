@@ -1,5 +1,6 @@
-var util = require('../../common/util');
+var util = require('../util');
 var base = require('./base');
+var mixins = require('./mixins');
 module.exports = {};
 
 function Rect(props) {
@@ -8,21 +9,17 @@ function Rect(props) {
 util.inherit(base.Base, Rect, {
     init: function init(props) {
         this.super(base.Base, 'init', props);
-        this.state.shape = {
-            x: props.x,
-            y: props.y,
-            w: props.w,
-            h: props.h
-        };
     },
     shape: 'rect',
     draw: function draw(page, cx) {
         this.super(base.Base, 'draw', page, cx);
-        var _ = this.state.shape;
+        if (! this.state.background) return;
+        var _ = this.state;
         cx.fillStyle = this.state.background;
         cx.fillRect(this.x(_.x), this.y(_.y), this.w(_.w), this.h(_.h));
     },
 });
+mixins.mouseEvents(Rect);
 module.exports.Rect = Rect;
 
 
@@ -49,7 +46,7 @@ util.inherit(base.Base, Text, {
         this.super(base.Base, 'draw', page, cx);
         var s = this.state;
         if (!s.text) return;
-        var _ = this.bound.state.shape;
+        var _ = this.bound.state;
         cx.font = this.getFont();
         cx.textAlign = this.state.textAlign;
         cx.textBaseline = this.state.textBaseline;
@@ -72,9 +69,9 @@ util.inherit(Rect, Grid, {
         lineWidth: 1,
         size: 20
     },
-    move: function move(event) {
-        if (this.props.move) {
-            this.props.move(event);
+    mousemove: function mousemove(event) {
+        if (this.props.mousemove) {
+            this.props.mousemove(event);
         }
         this.getSquare(
             event.offsetX,
@@ -131,7 +128,7 @@ util.inherit(Rect, Grid, {
 
         if (this.square) {
             var sq = this.square;
-            cx.fillStyle = 'red';
+            cx.fillStyle = 'rgba(255,0,0,0.3)';
             cx.fillRect(
                 this.x(sq[0]) + xOffset,
                 this.y(sq[1]) + yOffset,

@@ -11,8 +11,11 @@ Game.prototype = {
         this.home();
     },
     setupMouse: function setupMouse() {
-        this.canvas.on('click', this.mouse.click.bind(this.mouse))
-        this.canvas.on('mousemove', this.mouse.move.bind(this.mouse));
+        var mouse = this.mouse;
+        this.canvas.on('click', function (event) { mouse.handle(event, 'click')});
+        this.canvas.on('mousemove', function (event) { mouse.handle(event, 'mousemove')});
+        this.canvas.on('mousedown', function (event) { mouse.handle(event, 'mousedown')});
+        this.canvas.on('mouseup', function (event) { mouse.handle(event, 'mouseup')});
     },
     setRoutes: function setRoutes(routes) {
         this.routes = routes;
