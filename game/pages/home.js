@@ -4,9 +4,14 @@ var tower = require('../tower');
 
 module.exports = function () {
 var page = new x.Screen();
+
+var towers = new ui.Bound({
+    id: 'towers'
+});
+
 page.controls = [
     new ui.Bound({
-        background: '#ccc' 
+        background: '#ccc'
     }, [
         new ui.Bound({
             x: 50, y: 0, h: '100%', w: 750,
@@ -17,9 +22,6 @@ page.controls = [
                 strokeStyle: '#FFFFFF',
                 size: 26
             }),
-            new ui.Bound({
-                id: 'towers'
-            })
         ]),
         new ui.Bound({
             id: 'controls',
@@ -53,42 +55,19 @@ page.controls = [
                     grid.set({'size': grid.props.size});
                 }
             }),
-            new ui.Bound({
+            new tower.TowerButton({
                 x: 5, y: 160, w: 40, h: 40,
-                background: 'green',
-                dragStart: function (event) {
-                    this.tower = new tower.Basic({
-                        x: event.offsetX, y: event.offsetY,
-                        w: 20, h: 20,
-                        click: function (event) {
-                            console.log(this);
-                        },
-                        dragging: true,
-                        background: 'green'
-                    });
-                    this.tower.screen = this.screen;
-                    page.root.children.push(this.tower);
-                },
-                drag: function (event) {
-                    this.tower.set({
-                        x: event.offsetX, y: event.offsetY,
-                        isTower: true
-                    });
-                },
-                dragStop: function (event) {
-                    page.root.children.splice(page.root.children.indexOf(this.tower), 1);
-                    var towers = page.getWidget('towers');
-                    towers.children.push(this.tower);
-                    this.tower.setBound(towers);
-                    this.tower.set({
-                        x: event.offsetX - towers.x(), y: towers.y(event.offsetY),
-                        dragging: false,
-                        isTower: true
-                    });
-                }
+                tower: 'Basic',
+                bound: towers
+            }),
+            new tower.TowerButton({
+                x: 5, y: 200, w: 40, h: 40,
+                tower: 'Arrow',
+                bound: towers
             })
         ])
-    ])
+    ]),
+    towers
 ];
 return page;
 };
