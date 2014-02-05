@@ -31,7 +31,7 @@ var events = {
             dragCharge = 0;
         }
         if (event.which == 1 && dragStart == this && dragCharge < 2) {
-            dragCharge++; 
+            dragCharge++;
         } else if (dragStart == this && dragCharge > 1 && !drag) {
             var widget = this;
             drag = true;
@@ -41,11 +41,11 @@ var events = {
             if (widget.props.drag) {
                 drag = function (event) {
                     widget.props.drag.call(widget, event);
-                }; 
+                };
             }
             if (widget.props.dragStop) {
                 dragStop = function (event) {
-                    widget.props.dragStop.call(widget, event); 
+                    widget.props.dragStop.call(widget, event);
                 };
             }
         } else if (drag && typeof drag == 'function') {
@@ -54,8 +54,10 @@ var events = {
     },
     mousedown: function (event) {
         if (this.props.mousedown) this.props.mousedown(event);
-        event.propagate = false;
-        dragStart = this;
+        if (this.props.drag || this.props.dragStart || this.props.dragStop) {
+            event.propagate = false;
+            dragStart = this;
+        }
     },
     mouseup: function (event) {
         if (this.props.mouseup) this.props.mouseup(event);
@@ -63,10 +65,6 @@ var events = {
             event.propagate = false;
             dragStop(event);
         }
-    },
-    drag: function (event) {
-        console.log(this);
-        if (this.props.drag) this.props.drag(event);
     }
 };
 module.exports.mouseEvents = function mixins(constructor) {
