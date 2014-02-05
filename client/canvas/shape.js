@@ -16,7 +16,7 @@ util.inherit(base.Base, Rect, {
         if (! this.state.background) return;
         var _ = this.state;
         cx.fillStyle = this.state.background;
-        cx.fillRect(this.x(_.x), this.y(_.y), this.w(_.w), this.h(_.h));
+        cx.fillRect(this.x(_.x), this.y(_.y), this.w(), this.h());
     },
 });
 mixins.mouseEvents(Rect);
