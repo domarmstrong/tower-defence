@@ -19,6 +19,7 @@ module.exports.extend = function extend(a, b) {
             a[key] = b[key];
         }
     });
+    return a;
 };
 
 /*
@@ -41,4 +42,4 @@ module.exports.reexport = function reexport(module) {
             });
         }
     };
-}
+};

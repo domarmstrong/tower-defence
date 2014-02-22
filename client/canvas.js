@@ -26,7 +26,7 @@ Canvas.prototype = {
          * If name & fn pointer just remove that one
          */
         if (typeof name == 'string' && !fn) {
-            fns = this.events[name]; 
+            fns = this.events[name];
             if (! Array.isArray(fns)) return;
             while (fns.length) {
                 this.c.removeEventListener(name, fns.pop());

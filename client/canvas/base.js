@@ -17,7 +17,6 @@ Base.prototype = {
         var args = Array.prototype.slice.call(arguments, 2);
         superClass.prototype[method].apply(this, args);
     },
-    isPercent: new RegExp(/[0-9]%$/),
     set: function set(obj) {
         util.extend(this.state, obj);
         this.screen.draw();
@@ -26,6 +25,7 @@ Base.prototype = {
     get: function get(prop) {
         return this.state[prop];
     },
+    isPercent: new RegExp(/[0-9]%$/),
     setBound: function setBound(widget) {
         this.bound = widget;
         return this;
@@ -67,6 +67,11 @@ Base.prototype = {
             return Number(n);
         }
         return n;
+    },
+    remove: function () {
+        var idx = this.bound.children.indexOf(this);
+        this.bound.children.splice(idx, 1);
+        this.screen.draw();
     }
 };
 module.exports.Base = Base;

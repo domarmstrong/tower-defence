@@ -22,6 +22,25 @@ util.inherit(base.Base, Rect, {
 mixins.mouseEvents(Rect);
 module.exports.Rect = Rect;
 
+function Rect(props) {
+    this.init.apply(this, arguments);
+}
+util.inherit(base.Base, Rect, {
+    init: function init(props) {
+        this.super(base.Base, 'init', props);
+    },
+    shape: 'rect',
+    draw: function draw(page, cx) {
+        this.super(base.Base, 'draw', page, cx);
+        if (! this.state.background) return;
+        var _ = this.state;
+        cx.fillStyle = this.state.background;
+        cx.fillRect(this.x(_.x), this.y(_.y), this.w(), this.h());
+    },
+});
+mixins.mouseEvents(Rect);
+module.exports.Rect = Rect;
+
 
 function Text(props) {
     this.init.apply(this, arguments);
@@ -56,6 +75,19 @@ util.inherit(base.Base, Text, {
 });
 module.exports.Text = Text;
 
+function similar(a, b) {
+    var similar = true;
+    if (a && b) {
+        Object.keys(a).forEach(function (key) {
+            if (a[key] != b[key]) {
+                similar = false;
+            }
+        });
+    } else if (a != b) {
+        similar = false;
+    }
+    return similar;
+}
 
 function Grid(props) {
     this.init.apply(this, arguments);
@@ -63,6 +95,8 @@ function Grid(props) {
 util.inherit(Rect, Grid, {
     init: function init(props) {
         this.super(Rect, 'init', props);
+        this.square = null;
+        this.lastSquare = null;
     },
     defaults: {
         strokeStyle: '#FF0000',
@@ -97,9 +131,21 @@ util.inherit(Rect, Grid, {
         } else {
             x = Math.floor(x / s.size) * s.size;
             y = Math.floor(y / s.size) * s.size;
-            this.square = [x, y, this.state.size];
+            var actualX = x + this.x() + xOffset;
+            var actualY = y + this.y() + yOffset;
+            this.square = {
+                x: x,
+                y: y,
+                size: this.state.size,
+                actualX: actualX,
+                actualY: actualY,
+            };
         }
-        this.screen.draw();
+        // If the square has changed redraw;
+        if (! similar(this.square, this.lastSquare)) {
+            this.screen.draw();
+        }
+        this.lastSquare = this.square;
     },
     getRows: function getRows() {
         return this.h() / this.state.size;
@@ -130,9 +176,9 @@ util.inherit(Rect, Grid, {
             var sq = this.square;
             cx.fillStyle = 'rgba(255,0,0,0.3)';
             cx.fillRect(
-                this.x(sq[0]) + xOffset,
-                this.y(sq[1]) + yOffset,
-                sq[2], sq[2]);
+                this.x(sq.x) + xOffset,
+                this.y(sq.y) + yOffset,
+                sq.size, sq.size);
         }
 
         // Horizontal lines

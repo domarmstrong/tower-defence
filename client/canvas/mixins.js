@@ -15,59 +15,75 @@ module.exports.children = function children(constructor) {
     });
 };
 
-var dragCharge = 0,
-    dragStart = null,
-    drag = null,
-    dragStop = null;
+var dragging = null;
 
-var events = {
-    click: function (event) {
-        if (this.props.click) this.props.click(event);
-    },
-    mousemove: function (event) {
-        if (this.props.mousemove) this.props.mousemove(event);
-        if (event.which == 0) {
-            dragStart = drag = dragStop = null;
-            dragCharge = 0;
+function events() {
+    var dragCharge = 0,
+        onDragStart = null,
+        onDrag = null,
+        onDragStop = null;
+
+    function startDrag(event, widget) {
+        var p = widget.props;
+        if (! (p.dragStart || p.drag || p.dragStop)) {
+            return;
         }
-        if (event.which == 1 && dragStart == this && dragCharge < 2) {
-            dragCharge++;
-        } else if (dragStart == this && dragCharge > 1 && !drag) {
-            var widget = this;
-            drag = true;
-            if (widget.props.dragStart) {
-                widget.props.dragStart.call(widget, event);
-            }
-            if (widget.props.drag) {
-                drag = function (event) {
-                    widget.props.drag.call(widget, event);
-                };
-            }
-            if (widget.props.dragStop) {
-                dragStop = function (event) {
-                    widget.props.dragStop.call(widget, event);
-                };
-            }
-        } else if (drag && typeof drag == 'function') {
-            drag(event);
+        dragging = widget;
+        if (widget.props.dragStart) {
+            widget.props.dragStart.call(widget, event);
         }
-    },
-    mousedown: function (event) {
-        if (this.props.mousedown) this.props.mousedown(event);
-        if (this.props.drag || this.props.dragStart || this.props.dragStop) {
-            event.propagate = false;
-            dragStart = this;
+        if (widget.props.drag) {
+            onDrag = function (event) {
+                widget.props.drag.call(widget, event);
+            };
         }
-    },
-    mouseup: function (event) {
-        if (this.props.mouseup) this.props.mouseup(event);
-        if (dragStop) {
-            event.propagate = false;
-            dragStop(event);
+        if (widget.props.dragStop) {
+            onDragStop = function (event) {
+                widget.props.dragStop.call(widget, event);
+            };
         }
     }
-};
-module.exports.mouseEvents = function mixins(constructor) {
+    function stopDrag(event) {
+        if (onDragStop) {
+            onDragStop(event);
+            event.propagate = false;
+        }
+        dragging = onDragStart = onDrag = onDragStop = null;
+        dragCharge = 0;
+    }
+
+    return {
+        click: function (event) {
+            if (this.props.click) {
+                this.props.click.call(this, event);
+            }
+        },
+        mousemove: function (event) {
+            if (this.props.mousemove) this.props.mousemove(event);
+            if (event.which == 1 && dragCharge < 2) {
+                dragCharge++;
+            } else if (dragCharge > 1 && !dragging) {
+                startDrag(event, this);
+            } else if (onDrag) {
+                onDrag(event);
+            }
+        },
+        mousedown: function (event) {
+            if (this.props.mousedown) {
+                this.props.mousedown.call(this, event);
+            }
+        },
+        mouseup: function (event) {
+            if (dragging) {
+                stopDrag(event, this);
+            }
+            if (this.props.mouseup) {
+                this.props.mouseup(this, event);
+            }
+        },
+    };
+}
+module.exports.mouseEvents = function mouseEvents(constructor) {
     var proto = constructor.prototype;
-    util.extend(proto, events);
+    util.extend(proto, events());
 };

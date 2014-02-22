@@ -2,7 +2,11 @@ function Mouse() {
     this.screen;
     this.event;
 }
+// Aparently a var is much faster than refering to Math a lot
+var makePositive = Math.abs;
+
 Mouse.prototype = {
+    clickTolerance: 4,
     setEvent: function setEvent(event) {
         this.event = event;
     },
@@ -15,9 +19,25 @@ Mouse.prototype = {
             y: this.event.offsetY
         }
     },
+    startClick: function startClick(event) {
+        this.startx = event.x;
+        this.starty = event.y;
+    },
+    isClick: function isClick(event) {
+        var tolerance = this.clickTolerance / 2;
+        return (
+            makePositive(this.startx - event.x) < tolerance &&
+            makePositive(this.starty - event.y) < tolerance
+        );
+    },
     handle: function handle(event, action) {
         this.setEvent(event);
         event.propagate = true;
+        if (action === 'mousedown') {
+            this.startClick(event);
+        } else if (action === 'click' && !this.isClick(event)) {
+            return;
+        }
         if (this.screen) this.bubble(action, this.screen.root.children);
     },
     bubble: function bubble(action, children) {
