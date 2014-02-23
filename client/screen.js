@@ -20,9 +20,9 @@ Screen.prototype = {
         if (! self._suppress) {
             // Limit to 80 fps (seems to work best)
             self._suppress = setTimeout(function () {
+                self.root.draw(self, self.canvas.cx);
                 self._suppress = null;
             }, Math.floor(1000 / 80));
-            self.root.draw(self, self.canvas.cx);
         }
     },
     getWidget: function (id) {

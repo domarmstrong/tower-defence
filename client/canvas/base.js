@@ -6,7 +6,7 @@ function Base(props) {
 }
 Base.prototype = {
     init: function init(props) {
-        this.props = props
+        this.props = props || {};
         this.state = {};
         if (this.defaults) {
             util.extend(this.state, this.defaults);
@@ -55,8 +55,10 @@ Base.prototype = {
         return this.bound[axis](this.bound.state[axis]) + n;
     },
     getValue: function (which) {
-        var n = this.state[which];
-        if (n === undefined) n = this.bound.getValue(which);
+        var n = this.get(which);
+        if (n === undefined && this.bound) {
+            n = this.bound.getValue(which);
+        }
 
         if (typeof n == 'string') {
             if (this.isPercent.test(n)) {

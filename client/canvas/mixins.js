@@ -21,13 +21,11 @@ function events() {
     var dragCharge = 0,
         onDragStart = null,
         onDrag = null,
-        onDragStop = null;
+        onDragStop = null,
+        _startDrag = false;
 
     function startDrag(event, widget) {
-        var p = widget.props;
-        if (! (p.dragStart || p.drag || p.dragStop)) {
-            return;
-        }
+        _startDrag = false;
         dragging = widget;
         if (widget.props.dragStart) {
             widget.props.dragStart.call(widget, event);
@@ -60,15 +58,19 @@ function events() {
         },
         mousemove: function (event) {
             if (this.props.mousemove) this.props.mousemove(event);
-            if (event.which == 1 && dragCharge < 2) {
-                dragCharge++;
-            } else if (dragCharge > 1 && !dragging) {
-                startDrag(event, this);
-            } else if (onDrag) {
+            if (onDrag) {
                 onDrag(event);
+            } else if (event.which == 1 && dragCharge < 2) {
+                dragCharge++;
+            } else if (dragCharge > 1 && _startDrag && dragging === this) {
+                startDrag(event, this);
             }
         },
         mousedown: function (event) {
+            if (this.props.dragStart || this.props.drag || this.props.dragStop) {
+                _startDrag = true;
+                dragging = this;
+            }
             if (this.props.mousedown) {
                 this.props.mousedown.call(this, event);
             }

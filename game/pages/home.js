@@ -6,9 +6,6 @@ var levels = require('../level');
 module.exports = function () {
 var page = new x.Screen();
 
-var level = new levels.Level();
-level.screen = page;
-
 var towers = new ui.Bound({
     id: 'towers'
 });
@@ -18,7 +15,11 @@ var grid = new ui.Grid({
     size: 26
 });
 
-var towerDefaults = {
+var level = new levels.Level({
+    grid: grid    
+});
+
+var towerButtonDefaults = {
     x: 5, w: 40, h: 40,
     bound: towers,
     grid: grid,
@@ -67,19 +68,20 @@ page.controls = [
             }),
             new tower.TowerButton(x.util.extend(
                 {y: 150, tower: 'Basic'},
-                towerDefaults
+                towerButtonDefaults
             )),
             new tower.TowerButton(x.util.extend(
                 {y: 200, tower: 'Arrow'},
-                towerDefaults
+                towerButtonDefaults
             )),
             new tower.TowerButton(x.util.extend(
                 {y: 250, tower: 'Basic'},
-                towerDefaults
+                towerButtonDefaults
             ))
         ])
     ]),
-    towers
+    towers,
+    level
 ];
 return page;
 };

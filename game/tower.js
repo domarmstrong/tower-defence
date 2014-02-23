@@ -10,35 +10,34 @@ x.util.inherit(x.ui.Rect, Basic, {
         this.super(x.ui.Rect, 'init', props);
     },
     defaults: {
-        strokeStyle: '#FF0000',
-        lineWidth: 1,
-        size: 20,
-        range: 60,
+        range: 1,
         background: 'red'
     },
     click: function click(event) {
         this.super(x.ui.Rect, 'click', event);
         this.props.level.set({'selected': this});
     },
-    showFireRange: function showFireRange(cx) {
-        var centerX = this.state.x + (this.state.size / 2);
-        var centerY = this.state.y + (this.state.size / 2);
-        var radius = this.state.range;
-
-        cx.beginPath();
-        cx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-        cx.lineWidth = 3;
-        cx.strokeStyle = '#003300';
-        cx.stroke();
-    },
     draw: function draw(page, cx) {
+        this.state.size = this.props.grid.state.size - 1;
+        this.state.h = this.state.w = this.state.size;
         this.super(x.ui.Rect, 'draw', page, cx);
-        if (this.props.level.state.selected === this) {
-            this.showFireRange(cx);
-        }
     }
 });
 module.exports.Basic = Basic;
+
+function Arrow(props) {
+    this.init.apply(this, arguments);
+}
+x.util.inherit(Basic, Arrow, {
+    init: function init(props) {
+        this.super(Basic, 'init', props);
+    },
+    defaults: {
+        range: 2,
+        background: 'green'
+    }
+});
+module.exports.Arrow = Arrow;
 
 function TowerButton(props) {
     this.init.apply(this, arguments);
@@ -53,7 +52,7 @@ x.util.inherit(x.ui.Rect, TowerButton, {
             break;
         case 'Arrow':
             this.state.background = '#444'
-            this.Tower = Basic;
+            this.Tower = Arrow;
         }
         this.setup();
     },
@@ -62,10 +61,10 @@ x.util.inherit(x.ui.Rect, TowerButton, {
         self.props.dragStart = function (event) {
             event.propagate = false;
             self.tower = new self.Tower({
-                w: 20, h: 20,
                 level: this.props.level,
+                grid: this.props.grid,
                 click: function (event) {
-                    console.log(self.x(), self.state);
+                    //console.log(self.x(), self.state);
                 }
             });
             self.tower.screen = self.bound.screen;
@@ -78,8 +77,8 @@ x.util.inherit(x.ui.Rect, TowerButton, {
             var gridSq = self.props.grid.square;
             if (gridSq) {
                 self.tower.set({
-                    x: self.mouseX(gridSq.actualX + (gridSq.size / 2)),
-                    y: self.mouseY(gridSq.actualY + (gridSq.size / 2))
+                    x: self.mouseX(gridSq.actualX + (gridSq.size / 2) + 0.5),
+                    y: self.mouseY(gridSq.actualY + (gridSq.size / 2) + 0.5)
                 });
             } else {
                 self.tower.remove();
