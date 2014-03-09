@@ -1,4 +1,4 @@
-var x = require('../client/x');
+var x = require('canvas-x');
 module.exports = {};
 
 function Level(props) {

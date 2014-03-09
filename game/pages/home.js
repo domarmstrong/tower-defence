@@ -1,4 +1,4 @@
-var x = require('../../client/x');
+var x = require('canvas-x');
 var ui = x.ui;
 var tower = require('../tower');
 var levels = require('../level');
@@ -39,33 +39,6 @@ page.controls = [
             x: 0, y: 0, h: '100%', w: 50,
             background: '#222'
         }, [
-            new ui.Button({
-                x: 5, y: 5, w: 40, h: 40,
-                text: '+',
-                fontSize: '35px',
-                click: function () {
-                    var grid = page.getWidget('grid');
-                    grid.set({'size': grid.get('size') + 1});
-                }
-            }),
-            new ui.Button({
-                x: 5, y: 50, w: 40, h: 40,
-                text: '-',
-                fontSize: '35px',
-                click: function () {
-                    var grid = page.getWidget('grid');
-                    grid.set({'size': grid.get('size') - 1});
-                }
-            }),
-            new ui.Button({
-                x: 5, y: 95, w: 40, h: 40,
-                text: 'Reset',
-                fontSize: '11px',
-                click: function () {
-                    var grid = page.getWidget('grid');
-                    grid.set({'size': grid.props.size});
-                }
-            }),
             new tower.TowerButton(x.util.extend(
                 {y: 150, tower: 'Basic'},
                 towerButtonDefaults

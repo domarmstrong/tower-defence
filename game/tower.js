@@ -1,6 +1,5 @@
-var x = require('../client/x');
+var x = require('canvas-x');
 module.exports = {};
-
 
 function Basic(props) {
     this.init.apply(this, arguments);

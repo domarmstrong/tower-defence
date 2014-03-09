@@ -1,4 +1,6 @@
-var Game = require('../client/x').Game;
+var Game = require('canvas-x').Game;
+var x = require('canvas-x');
+console.log(x);
 
 var routes = {
     'home': require('./pages/home')

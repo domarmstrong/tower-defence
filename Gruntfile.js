@@ -1,3 +1,5 @@
+var exec = require('child_process').exec;
+
 module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
@@ -32,7 +34,7 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: ['common/**/*.js', 'client/**/*.js', 'game/**/*.js'],
+                files: ['node_modules/canvas-x/lib/main.js', 'game/**/*.js'],
                 tasks: ['default']
             },
             livereload: {
@@ -50,6 +52,20 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    grunt.registerTask('test', 'Run Mocha tests', function (testname) {
+        var done = this.async();
+        var grep = '';
+        if (testname) {
+            grep = ' --grep ' + testname.replace(' ', '\\ ');
+        }
+        exec('./node_modules/mocha/bin/mocha' + grep, null, function (error, stdout, stderr) {
+            if (error) {
+                return done(error);
+            }
+            done( grunt.log.write(stdout) );
+        });
+    });
+    grunt.registerTask('clean', ['clean']);
     grunt.registerTask('default', ['browserify']);
     grunt.registerTask('production', ['browserify', 'uglify']);
 };
